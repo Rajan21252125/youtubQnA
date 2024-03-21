@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Summary = () => {
   const [token, setToken] = useState("");
@@ -10,6 +10,14 @@ const Summary = () => {
       setToken(yuoutubeUrl.split("v=")[1]);
     });
   };
+
+
+  useEffect(() => {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const yuoutubeUrl = tabs[0].url;
+      setToken(yuoutubeUrl.split("v=")[1]);
+    });
+  })
 
   return (
     <div className="flex flex-col items-center text-white">
