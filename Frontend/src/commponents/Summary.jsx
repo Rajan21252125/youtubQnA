@@ -34,6 +34,8 @@ const Summary = () => {
       </button>
 
       <p className="mt-4">{token ? token : "url not found"}</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit doloribus voluptatibus itaque. Quod dolorum sit rerum omnis aspernatur ullam laudantium dolorem doloremque quo, distinctio, impedit recusandae accusantium minima fugiat quidem sapiente ut velit! Omnis sit ea distinctio, saepe dolores sed repellendus temporibus laboriosam cum! Corporis vero dicta iure architecto nemo cumque praesentium incidunt temporibus suscipit!</p>
+      {token && <h2 className="text-xl mt-4">Ask your Doubt</h2>}
     </div>
   );
 };
