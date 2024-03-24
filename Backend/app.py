@@ -17,7 +17,6 @@ def questionAns():
     id = request.json["id"]
     question = request.json["question"]  # Extract question from request
     answer = qna(question,id)
-    
     return jsonify({"answer": answer})  # Return answer as JSON
 
 # ... (include other functions for transcript retrieval and QnA)
