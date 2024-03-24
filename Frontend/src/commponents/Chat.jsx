@@ -1,14 +1,18 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
+import { summarize } from "../api";
 
-const Chat = () => {
+const Chat = ({ token }) => {
     const [userMessages, setUserMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSendMessage = () => {
         if (inputValue.trim() !== "") {
-            setUserMessages(prevMessages => [...prevMessages, { sender: "user", text: inputValue }]);
+            const newUserMessage = { sender: "user", text: inputValue };
+            setUserMessages((prevMessages) => [...prevMessages, newUserMessage]);
             setInputValue("");
-            setTimeout(handleBotReply, 1000);
+            setTimeout(() => handleBotReply(newUserMessage), 1000);
         }
     };
 
@@ -19,14 +23,24 @@ const Chat = () => {
         }
     };
 
-    // Dummy bot replies for demonstration
-    const getBotReply = () => {
-        return "This is a bot reply.";
+    const getBotReply = async (token, question) => {
+        try {
+            setLoading(true);
+            const response = await summarize(token, question);
+            setLoading(false);
+            return response.data;
+        } catch (error) {
+            return "Something went wrong Please try again later";
+        }
     };
 
-    const handleBotReply = () => {
-        const botReply = getBotReply();
-        setUserMessages(prevMessages => [...prevMessages, { sender: "bot", text: botReply }]);
+    const handleBotReply = async (latestUserMessage) => {
+        try {
+            const botReply = await getBotReply(token, latestUserMessage.text);
+            setUserMessages((prevMessages) => [...prevMessages, { sender: "bot", text: botReply }]);
+        } catch (error) {
+            setUserMessages((prevMessages) => [...prevMessages, { sender: "bot", text: "Something went wrong. Please try again later." }]);
+        }
     };
 
     return (
@@ -34,9 +48,15 @@ const Chat = () => {
             <div className="overflow-y-auto">
                 {userMessages.map((message, index) => (
                     <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
-                        <div className="bg-blue-500 text-white p-2 rounded">
-                            {message.text}
-                        </div>
+                        {message.sender === 'user' ? (
+                            <div className="bg-blue-500 text-white p-2 rounded w-4/5">
+                                {message?.text}
+                            </div>
+                        ) : (
+                            <div className="bg-blue-500 text-white p-2 rounded w-4/5">
+                                {message?.text?.answer}
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
@@ -50,9 +70,7 @@ const Chat = () => {
                     onKeyDown={handleKeyDown} // Listen for keydown event
                 />
                 <button
-                    onClick={() => {
-                        handleSendMessage();
-                    }}
+                    onClick={handleSendMessage}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                     Send
@@ -60,6 +78,6 @@ const Chat = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Chat;

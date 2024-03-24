@@ -1,23 +1,37 @@
-/* eslint-disable no-undef */
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
+import { summarize } from "../api";
+import Loading from "./Loading";
 
-const Summary = () => {
-  const [token, setToken] = useState("");
 
-  const handleClick = () => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const yuoutubeUrl = tabs[0].url;
-      setToken(yuoutubeUrl.split("v=")[1]);
-    });
+const Summary = ({token}) => {
+  const [summary , setSummary] = useState("");
+  const [loading , setLoading ] = useState(false);
+
+
+  const fetchSummarize = async (token,question) => {
+    try {
+      const response = await summarize(token,question);
+      return response.data;
+    } catch (error) {
+      return "Something went wrong Please try again later"
+    }
+  }
+
+
+
+  const handleClick = async () => {
+    await getSummary();
   };
+  
+  const question = "Provide a short summary of this video"
 
-
-  useEffect(() => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const yuoutubeUrl = tabs[0].url;
-      setToken(yuoutubeUrl.split("v=")[1]);
-    });
-  })
+  const getSummary = async () => {
+    setLoading(true)
+    const sum = await fetchSummarize(token,question)
+    setLoading(false)
+    setSummary(sum.answer)
+  }
 
   return (
     <div className="flex flex-col items-center text-white">
@@ -29,13 +43,14 @@ const Summary = () => {
         type="button"
         className="py-3 px-4 mt-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:hover:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
         onClick={handleClick}
+        disabled={!token ? 'disabled' : ''}
       >
         Summarize
       </button>
-
-      <p className="mt-4">{token ? token : "url not found"}</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit doloribus voluptatibus itaque. Quod dolorum sit rerum omnis aspernatur ullam laudantium dolorem doloremque quo, distinctio, impedit recusandae accusantium minima fugiat quidem sapiente ut velit! Omnis sit ea distinctio, saepe dolores sed repellendus temporibus laboriosam cum! Corporis vero dicta iure architecto nemo cumque praesentium incidunt temporibus suscipit!</p>
-      {token && <h2 className="text-xl mt-4">Ask your Doubt</h2>}
+      <div className="mt-6">
+      {loading ? <Loading /> : <p>{summary}</p>}
+      {summary ? <p className="text-lg font-semibold mt-3 text-center">Start asking your doubt</p> : ""}
+      </div>
     </div>
   );
 };
