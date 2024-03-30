@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import { useEffect, useState } from "react";
 import Chat from "./commponents/Chat"
@@ -7,7 +8,7 @@ import { TbWorldSearch } from "react-icons/tb";
 
 
 const App = () => {
-  const [token, setToken] = useState("AOI7IVE3CMw");
+  const [token, setToken] = useState("syFZfO_wfMQ");
   const [googleSearch,setGoogleSearch] = useState(false);
   useEffect(() => {
     // chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -17,7 +18,7 @@ const App = () => {
   })
   return (
     <div className='relative min-w-96 p-4 bg-gray-900'>
-      <TbWorldSearch className={`${googleSearch ? "text-white hover:text-gray-400" : "text-gray-400 hover:text-white"} text-3xl hover:text-white cursor-pointer`} onClick={() => setGoogleSearch(!googleSearch)}/>
+      <TbWorldSearch className={`${googleSearch ? "text-white hover:text-gray-400" : "text-gray-400 hover:text-white"} text-3xl hover:text-white cursor-pointer fixed top-4 bg-gray-800 rounded-lg`} onClick={() => setGoogleSearch(!googleSearch)}/>
       <Summary token={token}/>
       <Chat token={token} googleSearch={googleSearch}/>
     </div>

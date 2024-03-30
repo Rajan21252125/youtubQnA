@@ -22,7 +22,7 @@ def get_video_transcript(id, languages=['hi', 'en']):
         transcript_cache[id] = script
         return script
     except Exception as e:
-        return e
+        return str({"status":False , "message":e})
 
 def get_summary(transcript):
     try:
@@ -33,22 +33,25 @@ def get_summary(transcript):
             )
             return response.data[0].embedding
     except Exception as e:
-        print(f"Error generating summary: {e}")
-        return e
+        return str({"status":False , "message":e})
 
 
 def qna(question, id):
-    transcript = get_video_transcript(id)
-    summary = get_summary(transcript)
-    if summary:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": "Provide a summary of the video"},
-                {"role": "assistant", "content": f"{transcript}"},
-                {"role": "user", "content": f"{question}"}
-            ],
-        )
-        return response.choices[0].message.content.strip()
-    else:
-        return "Transcript is empty or unavailable."
+    try:
+        transcript = get_video_transcript(id)
+        summary = get_summary(transcript)
+        if summary:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": "Provide a summary of the video"},
+                    {"role": "assistant", "content": f"{transcript}"},
+                    {"role": "user", "content": f"{question}"}
+                ],
+            )
+            return {"status": True, "message": response.choices[0].message.content.strip()}
+        else:
+            return "Transcript is empty or unavailable."
+    except Exception as e:
+        return {"status": False, "message": str(e)}
+

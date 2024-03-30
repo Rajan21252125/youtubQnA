@@ -1,5 +1,4 @@
 import requests
-import json
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -26,7 +25,7 @@ def search_google(query):
         return None
 
 def results(query):
-    # Example usage
+    # Example usage.0
     search_results = search_google(query)
     description = search_results['knowledge_graph']['description']
     source = search_results['knowledge_graph']['source']
