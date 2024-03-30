@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { summarize } from "../api";
+import { googleResult, summarize } from "../api";
 
-const Chat = ({ token }) => {
+const Chat = ({ token , googleSearch }) => {
     const [userMessages, setUserMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [loading, setLoading] = useState(false);
@@ -26,8 +26,7 @@ const Chat = ({ token }) => {
     const getBotReply = async (token, question) => {
         try {
             setLoading(true);
-            const response = await summarize(token, question);
-            setLoading(false);
+            const response = googleSearch ? await googleResult(question) : await summarize(token, question);
             return response.data;
         } catch (error) {
             return "Something went wrong Please try again later";

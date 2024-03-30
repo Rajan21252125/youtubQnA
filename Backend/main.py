@@ -12,24 +12,30 @@ transcript_cache = {}
 
 def get_video_transcript(id, languages=['hi', 'en']):
     # Check if transcript is already cached
-    if id in transcript_cache:
-        return transcript_cache[id]
-    
-    # If not cached, retrieve transcript and store in cache
-    transcript = YouTubeTranscriptApi.get_transcript(id, languages=languages)
-    script = " ".join([t["text"].strip() for t in transcript if t["text"] != "[Music]"])
-    transcript_cache[id] = script
-    return script
+    try:
+        if id in transcript_cache:
+            return transcript_cache[id]
+        
+        # If not cached, retrieve transcript and store in cache
+        transcript = YouTubeTranscriptApi.get_transcript(id, languages=languages)
+        script = " ".join([t["text"].strip() for t in transcript if t["text"] != "[Music]"])
+        transcript_cache[id] = script
+        return script
+    except Exception as e:
+        return e
 
 def get_summary(transcript):
-    if transcript:
-        response = client.embeddings.create(
-            input=transcript,
-            model="text-embedding-3-small"
-        )
-        return response.data[0].embedding
-    else:
-        return None
+    try:
+        if transcript:
+            response = client.embeddings.create(
+                input=transcript,
+                model="text-embedding-3-small"
+            )
+            return response.data[0].embedding
+    except Exception as e:
+        print(f"Error generating summary: {e}")
+        return e
+
 
 def qna(question, id):
     transcript = get_video_transcript(id)

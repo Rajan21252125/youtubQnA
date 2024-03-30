@@ -19,7 +19,6 @@ def questionAns():
     answer = qna(question,id)
     return jsonify({"answer": answer})  # Return answer as JSON
 
-# ... (include other functions for transcript retrieval and QnA)
 
 if __name__ == "__main__":
     app.run(debug=True)  # Start the Flask development server

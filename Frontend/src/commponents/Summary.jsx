@@ -14,7 +14,7 @@ const Summary = ({token}) => {
       const response = await summarize(token,question);
       return response.data;
     } catch (error) {
-      return "Something went wrong Please try again later"
+      return error.response.statusText
     }
   }
 
