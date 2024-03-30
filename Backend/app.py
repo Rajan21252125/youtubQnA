@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from main import qna
-from Backend.gsearch import results
+from Backend.gsearch import search
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -21,7 +21,7 @@ def questionAns():
 @app.route("/gsearch", method=["POST"])
 def gog_ser():
     query = request.json["query"]
-    gs = results(query)
+    gs = search(query)
     return gs
 
 if __name__ == "__main__":
