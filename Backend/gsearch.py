@@ -1,29 +1,28 @@
+<<<<<<< HEAD
 import requests
+=======
+from langchain.agents import load_tools
+from langchain.agents import initialize_agent
+from langchain_openai import OpenAI
+
+from langchain.agents import load_tools
+
+>>>>>>> 077e2fcaf9ee2f1d487e6b67fe2effcd9b930cc5
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-# Replace 'YOUR_API_KEY' with your actual API key
-api_key = os.getenv("SERPAPI_KEY")
-api_url = 'https://serpapi.com/search'
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Use OPENAI_KEY for consistency
 
+def search(query):
+    llm = OpenAI(temperature=0)
 
-def search_google(query):
-    params = {
-        'engine': 'google',
-        'q': query,
-        'api_key': api_key
-    }
+    tool_names = ["serpapi"]
+    tools = load_tools(tool_names)
 
-    try:
-        response = requests.get(api_url, params=params)
-        response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
-        data = response.json()
-        return data  # You may want to extract and process this data further
-    except requests.RequestException as e:
-        print('Error searching Google:', e)
-        return None
+    agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True)
 
+<<<<<<< HEAD
 def results(query):
     # Example usage.0
     search_results = search_google(query)
@@ -35,3 +34,7 @@ def results(query):
         question.append(i['question'])
 
     return description, source, question
+=======
+    ans = agent.invoke(query)
+    return ans
+>>>>>>> 077e2fcaf9ee2f1d487e6b67fe2effcd9b930cc5
