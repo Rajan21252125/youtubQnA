@@ -6,6 +6,11 @@
     "permissions" : [
         "activeTab"
     ],
+    "icon":{
+        "16": "../public/youtube.svg",
+        "48": "../public/youtube.svg",
+        "128": "../public/youtube.svg"
+    },
     "action" : {
         "default_popup" : "index.html"
     },
