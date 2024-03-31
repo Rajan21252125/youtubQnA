@@ -36,7 +36,8 @@ const Chat = ({ token, googleSearch }) => {
         try {
             if (googleSearch) {
                 const response = await googleResult(question);
-                return response.data.answer[0];
+                console.log(response)
+                return response.data.output;
             } else {
                 const response = await summarize(token, question);
                 return response.data.message;
