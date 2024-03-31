@@ -1,4 +1,5 @@
 # Project Name
+Youtube Summarizer and QnA Bot
 
 ## Description
 This project is a chat application that integrates with a backend server to provide responses to user queries. It utilizes natural language processing (NLP) models from OpenAI and external APIs for search functionality.
