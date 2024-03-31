@@ -8,13 +8,13 @@ import { TbWorldSearch } from "react-icons/tb";
 
 
 const App = () => {
-  const [token, setToken] = useState("syFZfO_wfMQ");
+  const [token, setToken] = useState("");
   const [googleSearch,setGoogleSearch] = useState(false);
   useEffect(() => {
-    // chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-    //   const yuoutubeUrl = tabs[0].url;
-    //   setToken(yuoutubeUrl.split("v=")[1]);
-    // });
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const yuoutubeUrl = tabs[0].url;
+      setToken(yuoutubeUrl.split("v=")[1]);
+    });
   })
   return (
     <div className='relative min-w-96 p-4 bg-gray-900'>
