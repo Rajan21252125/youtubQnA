@@ -1,4 +1,3 @@
-# Project Name
 Youtube Summarizer and QnA Bot
 
 ## Description
